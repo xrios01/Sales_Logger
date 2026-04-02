@@ -20,6 +20,15 @@ from other import show_help, secret, show_startup_guide
 from persistence import load_products
 
 
+def get_yes_no(prompt):
+    while True:
+        choice = input(color_text(prompt, YELLOW)).strip().lower()
+        if choice in ("y", "n"):
+            return choice
+        print_error("Please enter 'y' or 'n'.")
+        pause()
+
+
 def main():
     load_products()
     show_startup_guide()
@@ -80,7 +89,7 @@ def main():
                 print(" Inventory, material costs, or products were changed.")
                 print()
 
-                confirm = input(color_text("Are you sure you want to quit? (y/n): ", YELLOW)).strip().lower()
+                confirm = get_yes_no("Are you sure you want to quit? (y/n): ")
 
                 if confirm == "y":
                     clear_screen()
@@ -92,7 +101,7 @@ def main():
 
             # Normal quit confirmation: nothing meaningful happened
             else:
-                confirm = input(color_text("Are you sure you want to quit? (y/n): ", YELLOW)).strip().lower()
+                confirm = get_yes_no("Are you sure you want to quit? (y/n): ")
 
                 if confirm == "y":
                     clear_screen()
