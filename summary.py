@@ -10,7 +10,7 @@ from helpers import (
     pause,
     color_text,
     get_total_items,
-    get_addon_count,
+    get_addon_count,  # adjustments
     get_total_line_items,
     get_total_revenue,
     get_total_profit,
@@ -36,7 +36,7 @@ def save_summary():
             "date": now.strftime("%m-%d-%Y"),
             "time": now.strftime("%I:%M:%S %p"),
             "total_items_sold": get_total_items(),
-            "add_ons_sold": get_addon_count(),
+            "adjustments": get_addon_count(),
             "line_items": get_total_line_items(),
             "total_revenue": round(get_total_revenue(), 2),
             "overall_material_cost": round(get_total_material_cost(), 2),
@@ -99,11 +99,9 @@ def save_summary():
     print(color_text("Saved Data", BOLD + WHITE))
     print("-" * 40)
     print(f" Total items sold : {get_total_items()}")
-    print(f" Add-ons sold     : {get_addon_count()}")
+    print(f" Adjustments      : {get_addon_count()}")
     print(f" Line items       : {get_total_line_items()}")
     print(f" Total revenue    : ${get_total_revenue():.2f}")
-
-    
 
     pause()
 
@@ -182,7 +180,7 @@ def save_summary_csv():
         writer.writerow([])
         writer.writerow(["OVERALL SUMMARY"])
         writer.writerow(["Total Items Sold", get_total_items()])
-        writer.writerow(["Add-Ons Sold", get_addon_count()])
+        writer.writerow(["Adjustments", get_addon_count()])
         writer.writerow(["Line Items", get_total_line_items()])
         writer.writerow(["Total Revenue", f"${get_total_revenue():.2f}"])
         writer.writerow(["Overall Material Cost", f"${get_total_material_cost():.2f}"])
@@ -226,10 +224,8 @@ def save_summary_csv():
     print(color_text("Saved Data", BOLD + WHITE))
     print("-" * 40)
     print(f" Total items sold : {get_total_items()}")
-    print(f" Add-ons sold     : {get_addon_count()}")
+    print(f" Adjustments      : {get_addon_count()}")
     print(f" Line items       : {get_total_line_items()}")
     print(f" Total revenue    : ${get_total_revenue():.2f}")
-
-   
 
     pause()
