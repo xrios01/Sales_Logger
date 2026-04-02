@@ -57,7 +57,7 @@ def display_items():
 
     command_lines = [
     "[" + color_text("item number", BRIGHT_YELLOW) + "]".ljust(5) + " Add item to cart",
-    "[" + color_text("u", BRIGHT_YELLOW) + "]".ljust(15) + " Add custom charge",
+    "[" + color_text("u", BRIGHT_YELLOW) + "]".ljust(15) + " Add custom charges / discounts",
     "[" + color_text("f", BRIGHT_YELLOW) + "]".ljust(15) + " Finalize transaction",
     "[" + color_text("x", BRIGHT_YELLOW) + "]".ljust(15) + " Cancel current transaction",
     "[" + color_text("i", BRIGHT_YELLOW) + "]".ljust(15) + " Add/update inventory",
@@ -100,7 +100,7 @@ def display_items():
 
     totals_lines = [
         f"Items sold     : {color_text(str(get_total_items()), CYAN)}",
-        f"Add-ons        : {color_text(str(get_addon_count()), ORANGE)}",
+        f"Adjustment     : {color_text(str(get_addon_count()), ORANGE)}",
         f"Line items     : {color_text(str(get_total_line_items()), MAGENTA)}",
         f"Revenue        : {color_text(f'${get_total_revenue():.2f}', GREEN)}",
         f"Material cost  : {color_text(f'${get_total_material_cost():.2f}', ORANGE)}",
@@ -173,7 +173,7 @@ def show_totals():
         overall_profit_text = color_text(overall_profit_text, GREEN)
 
     print(f" Total items sold : {color_text(str(total_items), CYAN)}")
-    print(f" Add-ons sold     : {color_text(str(get_addon_count()), ORANGE)}")
+    print(f" Adjustments      : {color_text(str(get_addon_count()), ORANGE)}")
     print(f" Line items       : {color_text(str(get_total_line_items()), MAGENTA)}")
     print(f" Total revenue    : {color_text(f'${total_revenue:.2f}', GREEN)}")
     print(f" Material cost    : {color_text(f'${get_total_material_cost():.2f}', ORANGE)}")
