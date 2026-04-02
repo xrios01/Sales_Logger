@@ -4,9 +4,9 @@
 ##############################
 # Email Settings
 ##############################
-EMAIL_ENABLED = FALSE  # set to true to turn on email functiality only after you included the source email and app password
+EMAIL_ENABLED = False  # set to true to turn on email functiality only after you included the source email and app password
 SENDER_EMAIL = "youremail@email.com"
-APP_PASSWORD = "yourapppassword"
+APP_PASSWORD = "APP_PASSWORD"
 
 ##############################
 # Current transaction/cart
