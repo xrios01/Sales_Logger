@@ -1,5 +1,4 @@
 from datetime import datetime
-
 import data_store
 from email_receipt import send_receipt_email
 from helpers import (
@@ -18,6 +17,7 @@ from helpers import (
     CYAN,
     BOLD,
     WHITE,
+    BRIGHT_YELLOW,
 )
 
 
@@ -74,8 +74,8 @@ def add_custom_charge():
 
         print()
         print(color_text("Add a one-time charge to this transaction.", BOLD + WHITE))
-        print("Examples: charm add-on, engraving, gift wrap, rush fee, customization")
-        print("Type [q] at any prompt to cancel.")
+        print("Examples: charm add-on, engraving, gift wrap, rush fee, customization\n")
+        print("Type ["+color_text("q", BRIGHT_YELLOW) + "] at any prompt to cancel.")
         print("-" * 60)
 
         # ----------------------------
