@@ -65,12 +65,18 @@ def show_startup_guide():
     print("• Inventory")
     print("• Material costs")
     print("• Profit by person")
-    print("• JSON / CSV Sales logs")
+    print("• Outgoing reciepts")
+    print("• CSV / JSON Sales logs")
+    print()
+
+    print(color_text("USER NOTE:", BOLD + WHITE))
+    print("-" * 40)
+    print("All commands entered into the program must be followed by pressing " + color_text("Enter", BRIGHT_YELLOW) + ".\n")
     print()
 
     while True:
         choice = input(
-            color_text("Press Enter to view startup guide or type 's' to skip: ", YELLOW)
+            color_text("Press ", YELLOW) + color_text("Enter", BRIGHT_YELLOW) + color_text(" to continue or type ", YELLOW) + color_text("'s'", BRIGHT_YELLOW) + color_text( " to skip. ", YELLOW)
         ).strip().lower()
 
         if choice == "":
@@ -78,7 +84,7 @@ def show_startup_guide():
         elif choice == "s":
             return  # skip guide
         else:
-            print_error("Invalid input. Press Enter to continue or type 's' to skip.")
+            print_error("Invalid input.")
             print()
         
 
