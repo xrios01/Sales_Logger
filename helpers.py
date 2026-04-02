@@ -72,7 +72,7 @@ def get_total_items():
 
 
 def get_total_revenue():
-    return sum(data["revenue"] for data in data_store.sales.values())
+    return sum(sale["price"] for sale in data_store.sale_log)
 
 
 def get_total_material_cost():
@@ -81,6 +81,7 @@ def get_total_material_cost():
 
 def get_total_profit():
     return get_total_revenue() - get_total_material_cost()
+
 
 def get_addon_count():
     return sum(1 for sale in data_store.sale_log if sale.get("is_custom", False))
@@ -93,8 +94,30 @@ def get_total_line_items():
 def get_profit_by_maker():
     maker_totals = {}
 
-    for item_name, data in data_store.sales.items():
+    # Start with all known makers from products
+    for data in data_store.sales.values():
         maker = data.get("maker", "Unknown")
+        if maker not in maker_totals:
+            maker_totals[maker] = {
+                "items_sold": 0,
+                "revenue": 0.0,
+                "material_cost": data_store.material_costs.get(maker, 0.0),
+                "profit": 0.0,
+            }
+
+    # Also include makers that exist only in material_costs
+    for maker in data_store.material_costs:
+        if maker not in maker_totals:
+            maker_totals[maker] = {
+                "items_sold": 0,
+                "revenue": 0.0,
+                "material_cost": data_store.material_costs.get(maker, 0.0),
+                "profit": 0.0,
+            }
+
+    # Build revenue from actual recorded line items, including adjustments/discounts
+    for sale in data_store.sale_log:
+        maker = sale.get("maker", "Unknown")
 
         if maker not in maker_totals:
             maker_totals[maker] = {
@@ -104,8 +127,11 @@ def get_profit_by_maker():
                 "profit": 0.0,
             }
 
-        maker_totals[maker]["items_sold"] += data["qty"]
-        maker_totals[maker]["revenue"] += data["revenue"]
+        maker_totals[maker]["revenue"] += sale["price"]
+
+        # Only count actual products as items sold, not discounts/add-ons
+        if not sale.get("is_custom", False):
+            maker_totals[maker]["items_sold"] += 1
 
     for maker in maker_totals:
         maker_totals[maker]["profit"] = (
