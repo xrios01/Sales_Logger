@@ -1,4 +1,5 @@
 import data_store
+from persistence import save_products
 from helpers import (
     clear_screen,
     print_header,
@@ -127,6 +128,7 @@ def set_inventory():
             continue
 
         data_store.sales[name]["inventory"] = int(amount_text)
+        save_products()
         data_store.inventory_changed_this_session = True
         print_success(f"Inventory for {name} set to {data_store.sales[name]['inventory']}")
         pause()
