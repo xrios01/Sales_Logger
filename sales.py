@@ -1,6 +1,7 @@
 from datetime import datetime
 import data_store
 from email_receipt import send_receipt_email
+from persistence import save_products
 from helpers import (
     clear_screen,
     print_header,
@@ -48,6 +49,7 @@ def add_sale(item_index):
         data_store.current_customer["sold_by"] = sold_by if sold_by else "N/A"
 
     data_store.sales[name]["inventory"] -= 1
+    save_products()
 
     cart_item = {
         "item": name,
@@ -65,7 +67,7 @@ def add_sale(item_index):
 def add_custom_charge():
     while True:
         clear_screen()
-        print_header("ADD CUSTOM CHARGE / ADD-ON", CYAN)
+        print_header("ADD CUSTOM ADJUSTMENT", CYAN)
 
         if not data_store.current_cart:
             print_warning("Start a transaction first by adding at least one item.")
@@ -73,19 +75,19 @@ def add_custom_charge():
             return
 
         print()
-        print(color_text("Add a one-time charge to this transaction.", BOLD + WHITE))
-        print("Examples: charm add-on, engraving, gift wrap, rush fee, customization\n")
-        print("Type ["+color_text("q", BRIGHT_YELLOW) + "] at any prompt to cancel.")
+        print(color_text("Add a one-time adjustment to this transaction.", BOLD + WHITE))
+        print("Examples: charm add-on, engraving, gift wrap, discount, coupon, price correction\n")
+        print("Type [" + color_text("q", BRIGHT_YELLOW) + "] at any prompt to cancel.")
         print("-" * 60)
 
         # ----------------------------
         # Description
         # ----------------------------
         while True:
-            description = input(color_text("Description of add on: ", YELLOW)).strip()
+            description = input(color_text("Description: ", YELLOW)).strip()
 
             if description.lower() == "q":
-                print_warning("Custom charge cancelled.")
+                print_warning("Custom adjustment cancelled.")
                 pause()
                 return
 
@@ -100,20 +102,22 @@ def add_custom_charge():
         # Amount
         # ----------------------------
         while True:
-            amount_text = input(color_text("Extra charge amount $", YELLOW)).strip()
+            amount_text = input(
+                color_text("Adjustment amount (use negative for discount) $", YELLOW)
+            ).strip()
 
             if amount_text.lower() == "q":
-                print_warning("Custom charge cancelled.")
+                print_warning("Custom adjustment cancelled.")
                 pause()
                 return
 
             try:
                 amount = float(amount_text)
-                if amount <= 0:
+                if amount == 0:
                     raise ValueError
                 break
             except ValueError:
-                print_error("Please enter a valid amount greater than 0.")
+                print_error("Please enter a valid amount other than 0. Use negative for discounts.")
                 pause()
 
         makers = list(data_store.material_costs.keys())
@@ -128,17 +132,17 @@ def add_custom_charge():
         # ----------------------------
         while True:
             clear_screen()
-            print_header("ADD CUSTOM CHARGE / ADD-ON", CYAN)
+            print_header("ADD CUSTOM ADJUSTMENT", CYAN)
 
             print()
-            print(color_text("Review Custom Charge", BOLD + WHITE))
+            print(color_text("Review Adjustment", BOLD + WHITE))
             print("-" * 45)
             print(f" Description : {description}")
             print(f" Amount      : ${amount:.2f}")
 
             print()
-            print(color_text("Who should receive this charge?", BOLD + WHITE))
-            print("(This determines who gets the profit)", CYAN)
+            print(color_text("Who should this adjustment apply to?", BOLD + WHITE))
+            print("(This determines whose revenue/profit it affects)", CYAN)
             print("Type [q] to cancel.")
             print("-" * 45)
 
@@ -148,7 +152,7 @@ def add_custom_charge():
             choice = input(color_text("\nEnter number: ", YELLOW)).strip()
 
             if choice.lower() == "q":
-                print_warning("Custom charge cancelled.")
+                print_warning("Custom adjustment cancelled.")
                 pause()
                 return
 
@@ -166,8 +170,10 @@ def add_custom_charge():
             maker = makers[person_num - 1]
             break
 
+        label = "[DISCOUNT]" if amount < 0 else "[ADD-ON]"
+
         cart_item = {
-            "item": f"[ADD-ON] {description}",
+            "item": f"{label} {description}",
             "price": amount,
             "maker": maker,
             "is_custom": True,
@@ -175,7 +181,11 @@ def add_custom_charge():
 
         data_store.current_cart.append(cart_item)
 
-        print_success(f"Added: {description} (${amount:.2f}) assigned to {maker}")
+        if amount < 0:
+            print_success(f"Discount added: {description} (${amount:.2f}) assigned to {maker}")
+        else:
+            print_success(f"Adjustment added: {description} (${amount:.2f}) assigned to {maker}")
+
         show_cart_preview()
         return
 
@@ -291,6 +301,8 @@ def cancel_transaction():
     for item in data_store.current_cart:
         if not item.get("is_custom", False) and item["item"] in data_store.sales:
             data_store.sales[item["item"]]["inventory"] += 1
+    
+    save_products()
 
     data_store.current_cart.clear()
     data_store.current_customer = {
@@ -353,6 +365,7 @@ def remove_sale():
         data_store.sales[name]["qty"] -= 1
         data_store.sales[name]["revenue"] -= price
         data_store.sales[name]["inventory"] += 1
+        save_products()
 
         for i in range(len(data_store.sale_log) - 1, -1, -1):
             if (
