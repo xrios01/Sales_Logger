@@ -13,6 +13,7 @@ def save_products():
         saved_sales[name] = {
             "price": data["price"],
             "maker": data.get("maker", "Unknown"),
+            "inventory": data.get("inventory", 0),
         }
 
     with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -33,7 +34,7 @@ def load_products():
                         "price": saved.get("price", 0.0),
                         "qty": 0,
                         "revenue": 0.0,
-                        "inventory": 0,
+                        "inventory": saved.get("inventory", 0),
                         "maker": saved.get("maker", "Unknown"),
                     }
         except (json.JSONDecodeError, OSError):
@@ -46,7 +47,7 @@ def reset_daily_data():
     for item in data_store.sales.values():
         item["qty"] = 0
         item["revenue"] = 0.0
-        item["inventory"] = 0
+        # DO NOT reset inventory here
 
     makers = set()
 
