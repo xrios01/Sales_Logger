@@ -33,6 +33,7 @@ def show_help():
     print(color_text("Main Menu Commands", BOLD + WHITE))
     print("-" * 40)
     print(" [" + color_text("item number", BRIGHT_YELLOW) + "]  Add item sale")
+    print(" [" + color_text("u", BRIGHT_YELLOW) + "]            Add an extra charge or a discount to a cart depending on the amount sign (+/-)")
     print(" [" + color_text("f", BRIGHT_YELLOW) + "]            Finalize transaction / send one receipt")
     print(" [" + color_text("x", BRIGHT_YELLOW) + "]            Cancel current transaction")
     print(" [" + color_text("i", BRIGHT_YELLOW) + "]            Set or update inventory")
@@ -76,7 +77,7 @@ def show_startup_guide():
 
     while True:
         choice = input(
-            color_text("Press ", YELLOW) + color_text("Enter", BRIGHT_YELLOW) + color_text(" to continue or type ", YELLOW) + color_text("'s'", BRIGHT_YELLOW) + color_text( " to skip. ", YELLOW)
+            color_text("Press ", YELLOW) + color_text("Enter", BRIGHT_YELLOW) +color_text(" for more information", YELLOW) + color_text(" or type ", YELLOW) + color_text("'s'", BRIGHT_YELLOW) + color_text( " to skip to main menu: ", YELLOW)
         ).strip().lower()
 
         if choice == "":
