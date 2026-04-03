@@ -43,6 +43,7 @@ def show_help():
     print(" [" + color_text("t", BRIGHT_YELLOW) + "]            Show totals / profit / inventory")
     print(" [" + color_text("j", BRIGHT_YELLOW) + "]            Save receipt as JSON")
     print(" [" + color_text("c", BRIGHT_YELLOW) + "]            Save receipt as CSV")
+    print(" [" + color_text("e", BRIGHT_YELLOW) + "]            Email settings")
     print(" [" + color_text("h", BRIGHT_YELLOW) + "]            Show this help screen")
     print(" [" + color_text("q", BRIGHT_YELLOW) + "]            Quit the program")
 
