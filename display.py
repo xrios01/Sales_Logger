@@ -67,6 +67,7 @@ def display_items():
     "[" + color_text("t", BRIGHT_YELLOW) + "]".ljust(15) + " Show totals",
     "[" + color_text("j", BRIGHT_YELLOW) + "]".ljust(15) + " Save receipt as JSON",
     "[" + color_text("c", BRIGHT_YELLOW) + "]".ljust(15) + " Save receipt as CSV",
+    "[" + color_text("e", BRIGHT_YELLOW) + "]".ljust(15) + " Email settings",
     "[" + color_text("h", BRIGHT_YELLOW) + "]".ljust(15) + " Help / how to use",
     "[" + color_text("q", BRIGHT_YELLOW) + "]".ljust(15) + " Quit program",
     ]
