@@ -18,6 +18,7 @@ from sales import add_sale, finalize_transaction, cancel_transaction, remove_sal
 from summary import save_summary, save_summary_csv
 from other import show_help, secret, show_startup_guide
 from persistence import load_products
+from config_manager import load_config, config_exists, first_run_email_setup, email_settings_menu
 
 
 def get_yes_no(prompt):
@@ -31,6 +32,12 @@ def get_yes_no(prompt):
 
 def main():
     load_products()
+    load_config()
+
+    if not config_exists():
+        first_run_email_setup()
+        load_config()
+
     show_startup_guide()
 
     while True:
@@ -78,7 +85,7 @@ def main():
                 elif quit_choice == "q":
                     clear_screen()
                     print_header("GOODBYE", ORANGE)
-                    print_success("Exiting program.")
+                    print_success("Exiting program.\n")
                     break
                 else:
                     continue
@@ -89,24 +96,24 @@ def main():
                 print(" Inventory, material costs, or products were changed.")
                 print()
 
-                confirm = get_yes_no("Are you sure you want to quit? (y/n): ")
+                confirm = get_yes_no("\nAre you sure you want to quit? (y/n): ")
 
                 if confirm == "y":
                     clear_screen()
                     print_header("GOODBYE", ORANGE)
-                    print_success("Exiting program.")
+                    print_success("Exiting program.\n")
                     break
                 else:
                     continue
 
             # Normal quit confirmation: nothing meaningful happened
             else:
-                confirm = get_yes_no("Are you sure you want to quit? (y/n): ")
+                confirm = get_yes_no("\nAre you sure you want to quit? (y/n): ")
 
                 if confirm == "y":
                     clear_screen()
                     print_header("GOODBYE", ORANGE)
-                    print_success("Exiting program.")
+                    print_success("Exiting program.\n")
                     break
                 else:
                     continue
@@ -146,6 +153,9 @@ def main():
 
         elif choice == "u":
             add_custom_charge()
+
+        elif choice == "e":
+            email_settings_menu()
 
         elif choice.isdigit():
             item_num = int(choice)
